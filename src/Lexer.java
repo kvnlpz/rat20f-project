@@ -12,7 +12,7 @@ public class Lexer {
     }
 
     public static enum TokenType {
-        // Token types cannot have underscores
+        // The types of tokens we can have
         NUMBER("-?[0-9]+"), OPERATOR("[*|/|+|-]"), WHITESPACE("[ \t\f\r\n]+");
 
         public final String pattern;
@@ -40,15 +40,20 @@ public class Lexer {
 
 
     public static ArrayList<Token> lexFunc(String input) {
-        // The tokens to return
+        // The tokens
         ArrayList<Token> tokens = new ArrayList<Token>();
-        // Lexer logic begins here
-        StringBuffer tokenPatternsBuffer = new StringBuffer();
+
+        // Our lexer starts here
+
+        //StringBuffer is mutable
+        StringBuffer tokenBuffer = new StringBuffer();
+        //iterate through all the tokens we have
         for (TokenType tokenType : TokenType.values()){
-            tokenPatternsBuffer.append(String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern));
+            tokenBuffer.append(String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern));
         }
-        Pattern tokenPatterns = Pattern.compile(new String(tokenPatternsBuffer.substring(1)));
-        // Begin matching tokens
+        //regex patterns
+        Pattern tokenPatterns = Pattern.compile(new String(tokenBuffer.substring(1)));
+        // Now we're going to match the tokens with our enums
         Matcher matcher = tokenPatterns.matcher(input);
         while (matcher.find()) {
             if (matcher.group(TokenType.NUMBER.name()) != null) {
