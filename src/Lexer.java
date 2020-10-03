@@ -4,40 +4,12 @@ import java.util.regex.Pattern;
 
 public class Lexer {
 
-    private String input;
+    private final String input;
 
     public Lexer(String input) {
 
         this.input = input;
     }
-
-    public static enum TokenType {
-        // The types of tokens we can have
-        NUMBER("-?[0-9]+"), OPERATOR("[*|/|+|-]"), WHITESPACE("[ \t\f\r\n]+");
-
-        public final String pattern;
-
-        TokenType(String pattern) {
-            this.pattern = pattern;
-        }
-    }
-
-
-    public static class Token {
-        public TokenType type;
-        public String data;
-
-        public Token(TokenType type, String data) {
-            this.type = type;
-            this.data = data;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("(%s %s)", type.name(), data);
-        }
-    }
-
 
     public static ArrayList<Token> lexFunc(String input) {
         // The tokens
@@ -52,7 +24,7 @@ public class Lexer {
             tokenBuffer.append(String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern));
         }
         //regex patterns
-        Pattern tokenPatterns = Pattern.compile(new String(tokenBuffer.substring(1)));
+        Pattern tokenPatterns = Pattern.compile(tokenBuffer.substring(1));
         // Now we're going to match the tokens with our enums
         Matcher matcher = tokenPatterns.matcher(input);
         while (matcher.find()) {
@@ -66,6 +38,33 @@ public class Lexer {
                 continue;
         }
         return tokens;
+    }
+
+
+    public enum TokenType {
+        // The types of tokens we can have
+        NUMBER("-?[0-9]+"), OPERATOR("[*|/|+|-]"), WHITESPACE("[ \t\f\r\n]+");
+
+        public final String pattern;
+
+        TokenType(String pattern) {
+            this.pattern = pattern;
+        }
+    }
+
+    public static class Token {
+        public TokenType type;
+        public String data;
+
+        public Token(TokenType type, String data) {
+            this.type = type;
+            this.data = data;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("(%s %s)", type.name(), data);
+        }
     }
 
 }
