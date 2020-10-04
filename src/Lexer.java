@@ -43,7 +43,9 @@ public class Lexer {
 
     public enum TokenType {
         // The types of tokens we can have
-        NUMBER("-?[0-9]+"), OPERATOR("[*|/|+|-]"), WHITESPACE("[ \t\f\r\n]+");
+        NUMBER("-?[0-9]+"), OPERATOR("[*|/|+|-]"), WHITESPACE("[ \t\f\r\n]+"),
+        SEPERATOR("\\{{[^)]*\\}}");
+//        IF_STATEMENT("if\\([^|&\\n]*?\\)");
 
         public final String pattern;
 
@@ -55,15 +57,17 @@ public class Lexer {
     public static class Token {
         public TokenType type;
         public String data;
+        public int lineNumber;
 
         public Token(TokenType type, String data) {
             this.type = type;
             this.data = data;
+            this.lineNumber = 00;
         }
 
         @Override
         public String toString() {
-            return String.format("(%s %s)", type.name(), data);
+            return lineNumber + " " + type.name() + " " + data;
         }
     }
 

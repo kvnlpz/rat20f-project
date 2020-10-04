@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class Main {
 
+    public static String[] tokens;
     String commentStart = "/*";
     String commentEnd = "*/";
     String int_ID = "int";
@@ -18,13 +19,27 @@ public class Main {
     String return_keyword = "return";
     String get_keyword = "get";
     String put_keyword = "put";
-    public static String[] tokens;
-
 
     public static void main(String[] args) {
+        StringBuilder fileContents = new StringBuilder();
 
-        String input = "11 + 22 - 33";
+        try {
+            File file = new File("src/ratlanguage.txt");
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+//                System.out.println(line);
+                fileContents.append(line);
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("FIle not found.");
+            e.printStackTrace();
+        }
+//        String input = "11 + 22 - 33";
+        String input = String.valueOf(fileContents);
         Lexer lex = new Lexer(input);
+
 
         // Create tokens and print them
         ArrayList<Lexer.Token> tokens = Lexer.lexFunc(input);
@@ -64,7 +79,7 @@ public class Main {
 //            char c = line.charAt(i);
 //            System.out.println(c);
 //        }
-    }
+}
 
 //}
 
