@@ -21,31 +21,31 @@ public class Lexer {
         // Our lexer starts here
 
         //StringBuffer is mutable
-        StringBuffer tokenBuffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         //iterate through all the tokens we have
         for (TokenType tokenType : TokenType.values()) {
-            tokenBuffer.append(String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern));
+            buffer.append(String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern));
         }
         //regex patterns
-        matcher(input, tokens, tokenBuffer);
+        matcher(input, tokens, buffer);
         return tokens;
     }
 
     private static void matcher(String input, ArrayList<Token> tokens, StringBuffer tokenBuffer) {
-        Pattern tokenPatterns = Pattern.compile(tokenBuffer.substring(1));
+        Pattern pattern = Pattern.compile(tokenBuffer.substring(1));
         // Now we're going to match the tokens with our enums
-        Matcher matcher = tokenPatterns.matcher(input);
-        while (matcher.find()) {
-            if (matcher.group(TokenType.KEYWORD.name()) != null) {
-                tokens.add(new Token(TokenType.KEYWORD, matcher.group(TokenType.KEYWORD.name())));
-            } else if ((matcher.group(TokenType.IDENTIFIER.name()) != null)) {
-                tokens.add(new Token(TokenType.IDENTIFIER, matcher.group(TokenType.IDENTIFIER.name())));
-            }else if (matcher.group(TokenType.SEPARATOR.name()) != null) {
-                tokens.add(new Token(TokenType.SEPARATOR, matcher.group(TokenType.SEPARATOR.name())));
-            } else if (matcher.group(TokenType.NUMBER.name()) != null) {
-                tokens.add(new Token(TokenType.NUMBER, matcher.group(TokenType.NUMBER.name())));
-            } else if (matcher.group(TokenType.OPERATOR.name()) != null) {
-                tokens.add(new Token(TokenType.OPERATOR, matcher.group(TokenType.OPERATOR.name())));
+        Matcher tokenMatcher = pattern.matcher(input);
+        while (tokenMatcher.find()) {
+            if (tokenMatcher.group(TokenType.KEYWORD.name()) != null) {
+                tokens.add(new Token(TokenType.KEYWORD, tokenMatcher.group(TokenType.KEYWORD.name())));
+            } else if ((tokenMatcher.group(TokenType.IDENTIFIER.name()) != null)) {
+                tokens.add(new Token(TokenType.IDENTIFIER, tokenMatcher.group(TokenType.IDENTIFIER.name())));
+            }else if (tokenMatcher.group(TokenType.SEPARATOR.name()) != null) {
+                tokens.add(new Token(TokenType.SEPARATOR, tokenMatcher.group(TokenType.SEPARATOR.name())));
+            } else if (tokenMatcher.group(TokenType.NUMBER.name()) != null) {
+                tokens.add(new Token(TokenType.NUMBER, tokenMatcher.group(TokenType.NUMBER.name())));
+            } else if (tokenMatcher.group(TokenType.OPERATOR.name()) != null) {
+                tokens.add(new Token(TokenType.OPERATOR, tokenMatcher.group(TokenType.OPERATOR.name())));
             }
         }
     }
@@ -68,12 +68,11 @@ public class Lexer {
     public static class Token {
         public TokenType type;
         public String data;
-        public int lineNumber;
+        public int lineNumber; //unused now
 
         public Token(TokenType type, String data) {
             this.type = type;
             this.data = data;
-            this.lineNumber = 00;
         }
 
         @Override
