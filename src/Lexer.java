@@ -28,14 +28,41 @@ public class Lexer {
         // Now we're going to match the tokens with our enums
         Matcher matcher = tokenPatterns.matcher(input);
         while (matcher.find()) {
-            if (matcher.group(TokenType.NUMBER.name()) != null) {
+            if (matcher.group(TokenType.KEYWORD.name()) != null) {
+                tokens.add(new Token(TokenType.KEYWORD, matcher.group(TokenType.KEYWORD.name())));
+                continue;
+            }
+            else if ((matcher.group(TokenType.IDENTIFIER.name()) != null) ) {
+                tokens.add(new Token(TokenType.IDENTIFIER, matcher.group(TokenType.IDENTIFIER.name())));
+                continue;
+            }
+
+
+            else if (matcher.group(TokenType.WHILESTATEMENT.name()) != null) {
+                tokens.add(new Token(TokenType.WHILESTATEMENT, matcher.group(TokenType.WHILESTATEMENT.name())));
+                continue;
+            }
+
+            else if (matcher.group(TokenType.IFSTATEMENT.name()) != null) {
+                tokens.add(new Token(TokenType.IFSTATEMENT, matcher.group(TokenType.IFSTATEMENT.name())));
+                continue;
+            }
+            else if (matcher.group(TokenType.SEPARATOR.name()) != null) {
+                tokens.add(new Token(TokenType.SEPARATOR, matcher.group(TokenType.SEPARATOR.name())));
+                continue;
+            }
+
+
+            else if (matcher.group(TokenType.NUMBER.name()) != null) {
                 tokens.add(new Token(TokenType.NUMBER, matcher.group(TokenType.NUMBER.name())));
                 continue;
-            } else if (matcher.group(TokenType.OPERATOR.name()) != null) {
+            }
+            else if (matcher.group(TokenType.OPERATOR.name()) != null) {
                 tokens.add(new Token(TokenType.OPERATOR, matcher.group(TokenType.OPERATOR.name())));
                 continue;
             } else if (matcher.group(TokenType.WHITESPACE.name()) != null)
                 continue;
+
         }
         return tokens;
     }
@@ -43,10 +70,13 @@ public class Lexer {
 
     public enum TokenType {
         // The types of tokens we can have
-        NUMBER("-?[0-9]+"), OPERATOR("[*|/|+|-]"), WHITESPACE("[ \t\f\r\n]+"),
-        SEPERATOR("\\{{[^)]*\\}}");
-//        IF_STATEMENT("if\\([^|&\\n]*?\\)");
-
+        NUMBER("[0-9]*\\.?[0-9]"), OPERATOR("[*|/|+|-]"), WHITESPACE("[ \t\f\r\n]+"),
+        IFSTATEMENT("if\\([^|&\\n]*?\\)"),
+        KEYWORD("(?<![a-zA-Z0-9])(if|while|int|get|for)(?![a-zA-Z0-9])"),
+        WHILESTATEMENT("while\\([^|&\\n]*?\\)"),
+//        IDENTIFIER("[_a-zA-Z][_a-zA-Z0-9]{0,30}")
+        IDENTIFIER("\\b(?!(one|if|while|int|get|for)\\b)\\w+"),
+        SEPARATOR("[^a-zA-Z\\d\\s:]");
         public final String pattern;
 
         TokenType(String pattern) {
@@ -67,7 +97,7 @@ public class Lexer {
 
         @Override
         public String toString() {
-            return lineNumber + " " + type.name() + " " + data;
+            return  type.name() + " " + data;
         }
     }
 

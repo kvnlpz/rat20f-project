@@ -1,9 +1,12 @@
-     int    low,  high, step;      /* declarations */
+int low, high, step;
+int x = 3;
 
-     get (low, high, step);
-     while (low  <=  high )  
-         {  put (low);
-             put (convert1x (low));
-             low =  low  +  step;
-         } 
+int x = 3.2;
+get (low, high, step);
+while(low  <=  high )
+{
+    put (low);
+    put (convert1x (low));
+    low =  low  +  step;
+}
 
