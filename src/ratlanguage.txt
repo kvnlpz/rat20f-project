@@ -6,7 +6,7 @@ get (low, high, step);
 while(low  <=  high )
 {
     put (low);
-    put (convert1x (low));
+    put (convert(low));
     low =  low  +  step;
 }
 
