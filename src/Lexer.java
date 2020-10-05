@@ -12,9 +12,7 @@ public class Lexer {
     }
 
 
-    private void matchFunction() {
-        //NUMBER OPERATOR WHITESPACE KEYWORD IDENTIFIER SEPARATOR
-    }
+
 
     public static ArrayList<Token> lexFunc(String input) {
         // The tokens
@@ -37,15 +35,6 @@ public class Lexer {
         Pattern tokenPatterns = Pattern.compile(tokenBuffer.substring(1));
         // Now we're going to match the tokens with our enums
         Matcher matcher = tokenPatterns.matcher(input);
-        TokenType[] tokenTypeArrayList = new TokenType[]{TokenType.KEYWORD, TokenType.NUMBER, TokenType.IDENTIFIER, TokenType.SEPARATOR, TokenType.OPERATOR};
-        while (matcher.find()){
-            for(TokenType tokenType : tokenTypeArrayList){
-                if(matcher.group(tokenType.getType() == tok)){
-
-                }
-            }
-        }
-
         while (matcher.find()) {
             if (matcher.group(TokenType.KEYWORD.name()) != null) {
                 tokens.add(new Token(TokenType.KEYWORD, matcher.group(TokenType.KEYWORD.name())));
@@ -71,13 +60,8 @@ public class Lexer {
         IDENTIFIER("\\b(?!(if|while|int|get|for)\\b)\\w+"),
         SEPARATOR("[^a-zA-Z\\d\\s:]");
         public final String pattern;
-
         TokenType(String pattern) {
             this.pattern = pattern;
-        }
-
-        public String getType() {
-            return pattern;
         }
     }
 
